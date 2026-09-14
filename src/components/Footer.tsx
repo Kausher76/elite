@@ -13,7 +13,13 @@ const Footer = () => {
 
         {/* Brand */}
         <a href="/" className="flex items-center gap-2">
-  <img src={companyLogo} alt="Company Logo" className="h-10 w-auto" />
+  <div className="bg-white rounded-md p-1">
+    <img
+      src={companyLogo}
+      alt="Company Logo"
+      className="h-10 w-auto"
+    />
+  </div>
 </a>
 
         {/* Navigation */}
