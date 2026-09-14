@@ -15,7 +15,7 @@ export const equipment: Equipment[] = [
     description:
       "Reliable excavators for construction, excavation and heavy-duty projects.",
     image:
-      "https://images.unsplash.com/photo-1580901368919-7738ef3e5e0a?auto=format&fit=crop&w=900&q=80",
+      "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTuJ9yrBqNSARwfYFC52fsRsgbHjbBMVH9xLqQGJKvOWtstIWBdsox3wwAhAUwl-5maDY37eBGAs031tyEqgQqEwYjUrdXc",
     available: true,
   },
   {
@@ -25,7 +25,7 @@ export const equipment: Equipment[] = [
     description:
       "Powerful mobile cranes suitable for heavy lifting and industrial projects.",
     image:
-      "https://images.unsplash.com/photo-1572982329540-0f3b3a4e3b3e?auto=format&fit=crop&w=900&q=80",
+      "https://elebia.com/wp-content/uploads/2020/07/type-of-mobile-cranes.jpg",
     available: true,
   },
   {
@@ -35,7 +35,7 @@ export const equipment: Equipment[] = [
     description:
       "High-performance wheel loaders for material handling and construction.",
     image:
-      "https://images.unsplash.com/photo-1579113800032-c38bd7635818?auto=format&fit=crop&w=900&q=80",
+      "https://s7d2.scene7.com/is/image/Caterpillar/CM20250916-202ea-e8102?$webp-cc-s$",
     available: true,
   },
   {
@@ -45,7 +45,7 @@ export const equipment: Equipment[] = [
     description:
       "Industrial forklifts for warehouses, construction and logistics.",
     image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80",
+      "https://acropolis-wp-content-uploads.s3.us-west-1.amazonaws.com/types-of-forklifts-hero.webp",
     available: true,
   },
 ];
