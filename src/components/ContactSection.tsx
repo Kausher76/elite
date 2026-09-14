@@ -1,22 +1,48 @@
+
 import {
   Mail,
   MapPin,
   Phone,
   Send,
 } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
+import emailjs from "@emailjs/browser";
+
+type Status = "idle" | "sending" | "success" | "error";
 
 const ContactSection = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<Status>("idle");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setSubmitted(true);
+    if (!formRef.current) return;
 
-    setTimeout(() => {
-      setSubmitted(false);
-    }, 4000);
+    setStatus("sending");
+
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      setStatus("success");
+      formRef.current.reset();
+
+      setTimeout(() => {
+        setStatus("idle");
+      }, 4000);
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setStatus("error");
+
+      setTimeout(() => {
+        setStatus("idle");
+      }, 4000);
+    }
   };
 
   return (
@@ -112,6 +138,7 @@ const ContactSection = () => {
             </p>
 
             <form
+              ref={formRef}
               onSubmit={handleSubmit}
               className="mt-7 space-y-5"
             >
@@ -125,8 +152,10 @@ const ContactSection = () => {
 
                   <input
                     required
+                    name="from_name"
                     type="text"
                     placeholder="Your name"
+                    disabled={status === "sending"}
                     className="h-12 w-full rounded-md border border-gray-200 px-4 outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
                   />
                 </div>
@@ -138,8 +167,10 @@ const ContactSection = () => {
 
                   <input
                     required
+                    name="phone"
                     type="tel"
                     placeholder="+966..."
+                    disabled={status === "sending"}
                     className="h-12 w-full rounded-md border border-gray-200 px-4 outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
                   />
                 </div>
@@ -152,8 +183,10 @@ const ContactSection = () => {
                 </label>
 
                 <input
+                  name="from_email"
                   type="email"
                   placeholder="you@example.com"
+                  disabled={status === "sending"}
                   className="h-12 w-full rounded-md border border-gray-200 px-4 outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
                 />
               </div>
@@ -165,16 +198,18 @@ const ContactSection = () => {
 
                 <select
                   required
+                  name="equipment"
+                  disabled={status === "sending"}
                   className="h-12 w-full rounded-md border border-gray-200 bg-white px-4 outline-none focus:border-yellow-400"
                 >
                   <option value="">Select equipment</option>
-                  <option>Excavator</option>
-                  <option>Mobile Crane</option>
-                  <option>Wheel Loader</option>
-                  <option>Forklift</option>
-                  <option>Bulldozer</option>
-                  <option>Telehandler</option>
-                  <option>Other</option>
+                  <option value="Excavator">Excavator</option>
+                  <option value="Mobile Crane">Mobile Crane</option>
+                  <option value="Wheel Loader">Wheel Loader</option>
+                  <option value="Forklift">Forklift</option>
+                  <option value="Bulldozer">Bulldozer</option>
+                  <option value="Telehandler">Telehandler</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
 
@@ -184,19 +219,38 @@ const ContactSection = () => {
                 </label>
 
                 <textarea
+                  name="message"
                   rows={4}
                   placeholder="Tell us about your project..."
+                  disabled={status === "sending"}
                   className="w-full resize-none rounded-md border border-gray-200 p-4 outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
                 />
               </div>
 
+              {status === "success" && (
+                <p className="text-sm font-semibold text-green-600">
+                  ✓ Request sent successfully. We'll contact you soon.
+                </p>
+              )}
+
+              {status === "error" && (
+                <p className="text-sm font-semibold text-red-600">
+                  ✕ Something went wrong. Please try again.
+                </p>
+              )}
+
               <button
                 type="submit"
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-black font-bold text-white transition hover:bg-yellow-400 hover:text-black"
+                disabled={status === "sending"}
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-black font-bold text-white transition hover:bg-yellow-400 hover:text-black disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Send size={17} />
 
-                {submitted ? "Request Sent!" : "Send Request"}
+                {status === "sending"
+                  ? "Sending..."
+                  : status === "success"
+                    ? "Request Sent!"
+                    : "Send Request"}
               </button>
 
             </form>
@@ -208,3 +262,4 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
+
